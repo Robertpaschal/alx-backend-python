@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
-'''Task 8's module.
-'''
+"""
+This module contains a type-annotated function that takesa float and
+returns a function that multiplies a float by multiplier
+"""
+
+
 from typing import Callable
 
 
 def make_multiplier(multiplier: float) -> Callable[[float], float]:
-    '''Creates a multiplier function.
-    '''
-    return lambda x: x * multiplier
+    """
+    Creates and returns s function that
+    multiplies a float by the given multiplier
+    """
+    def multiplier_function(x: float) -> float:
+        return x * multiplier
+
+    return multiplier_function
