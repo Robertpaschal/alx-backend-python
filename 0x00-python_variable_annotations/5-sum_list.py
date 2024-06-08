@@ -7,7 +7,7 @@ returns their sum as a float.
 """
 
 
-def sum_list(input_list: list[float]) -> float:
+def sum_list(input_list: List[float]) -> float:
     """
     Sums a list of floating point numbers and returns the result"""
     return sum(input_list)
