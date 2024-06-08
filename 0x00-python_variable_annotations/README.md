@@ -1,0 +1,1 @@
+This directory contains lessons on python's variable annotations

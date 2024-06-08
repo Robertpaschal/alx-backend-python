@@ -1,0 +1,1 @@
+Here, I am learning advanced python scripting. Lessons like variable annotations and so on will be covered here
