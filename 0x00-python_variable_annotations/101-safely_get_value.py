@@ -10,7 +10,7 @@ NoneType = TypeVar('NoneType', bound=None)
 
 def safely_get_value(
         dct: Mapping,
-        key: Any, default: Union[T, NoneType] = None) -> Union[Any,T]:
+        key: Any, default: Union[T, None] = None) -> Union[Any,T]:
     """
     Safely gets a value from a dictionary by key,
     returning a default value if the key is not found.
