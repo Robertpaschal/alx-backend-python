@@ -3,7 +3,7 @@
 This module uses mypy to validate and correct type annotations in
 it's function
 """
-from typing import List, Tuple, Union
+from typing import List, Tuple
 
 
 def zoom_array(lst: Tuple, factor: int = 2) -> List:
@@ -15,18 +15,20 @@ def zoom_array(lst: Tuple, factor: int = 2) -> List:
         factor (int): The zoom factor, defaults to 2.
 
     Returns:
-        List: A new list with elements
-        repeated according to the zoom factor.
+        Tuple[int, ...]: A new tuple with elements repeated according to the zoom factor.
     """
-    zoomed_in: List[int] = [
+    zoomed_in: List = [
         item for item in lst
         for _ in range(factor)
     ]
-    return List(zoomed_in)
+    return zoomed_in
 
 
-array = (12, 72, 91)  # Changed to tuple
+array = (12, 72, 91)
 
 zoom_2x = zoom_array(array)
 
-zoom_3x = zoom_array(array, 3)  # Changed to int
+zoom_3x = zoom_array(array, 3)
+
+
+
