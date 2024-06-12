@@ -14,7 +14,6 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     Collects all delays and returns them in ascending order
     without using sort().
     """
-    delays = []
-    for _ in range(n):
-        delays.append(await wait_random(max_delay))
+    delays = await asyncio.gather(
+        *tuple(map(lambda _:wait_random(max_delay), range(n))))
     return sorted(delays)
