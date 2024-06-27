@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import (
     patch,
     Mock
-)
+)   
 from utils import (
     access_nested_map,
     get_json
@@ -85,12 +85,14 @@ class TestGetJson(unittest.TestCase):
         test_payload: Dict
             The expected JSON payload.
         """
-        config = {'return_value.json.return_value': test_payload}
-        patcher = patch('requests.get', **config)
-        mock = patcher.start()
-        self.assertEqual(get_json(test_url), test_payload)
-        mock.assert_called_once()
-        patcher.stop()
+        with patch('requests.get') as mock_get:
+            mock_response = Mock()
+            mock_response.json.return_value = test_payload
+            mock_get.return_value = mock_response
+
+            result = get_json(test_url)
+            mock_get.assert_called_once_with(test_url)
+            self.assertEqual(result, test_payload)
 
 
 if __name__ == "__main__":
