@@ -3,7 +3,14 @@
 Test module
 """
 import unittest
-from utils import access_nested_map
+from unittest.mock import (
+    patch,
+    Mock
+)
+from utils import (
+    access_nested_map,
+    get_json
+)
 from typing import Any, Dict, Tuple
 from parameterized import parameterized
 
@@ -57,6 +64,33 @@ class TestAccessNestedMap(unittest.TestCase):
         with self.assertRaises(KeyError) as context:
             access_nested_map(nested_map, path)
         self.assertEqual(str(context.exception), expected)
+
+
+class TestGetJson(unittest.TestCase):
+    """
+    Test class for get_json method
+    """
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    def test_get_json(self, test_url: str, test_payload: Dict) -> None:
+        """
+        Test that get_json returns the expected result.
+
+        Parameters
+        ----------
+        test_url: str
+            The URL to request.
+        test_payload: Dict
+            The expected JSON payload.
+        """
+        config = {'return_value.json.return_value': test_payload}
+        patcher = patch('requests.get', **config)
+        mock = patcher.start()
+        self.assertEqual(get_json(test_url), test_payload)
+        mock.assert_called_once()
+        patcher.stop()
 
 
 if __name__ == "__main__":
