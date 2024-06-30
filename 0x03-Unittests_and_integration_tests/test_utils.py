@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import (
     patch,
     Mock
-)   
+)
 from utils import (
     access_nested_map,
     get_json,
@@ -95,6 +95,7 @@ class TestGetJson(unittest.TestCase):
             mock_get.assert_called_once_with(test_url)
             self.assertEqual(result, test_payload)
 
+
 class TestMemoize(unittest.TestCase):
     """
     Tests for the memoize decorator.
@@ -116,8 +117,9 @@ class TestMemoize(unittest.TestCase):
                 A memoized property that calls a_method.
                 """
                 return self.a_method()
-        
-        with patch.object(TestClass, 'a_method', return_value=42) as mock_method:
+
+        with patch.object(TestClass,
+                          'a_method', return_value=42) as mock_method:
             test_instance = TestClass()
 
             result1 = test_instance.a_property
