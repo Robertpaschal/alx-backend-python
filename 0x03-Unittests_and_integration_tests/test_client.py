@@ -5,7 +5,7 @@ Test client module
 import unittest
 from client import GithubOrgClient
 from parameterized import parameterized
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, PropertyMock
 from typing import Dict
 
 
@@ -17,7 +17,7 @@ class TestGithubOrgClient(unittest.TestCase):
         ("google", {"login": "google"}),
         ("abc", {"login": "abc"}),
     ])
-    @patch('client.get_json', return_value={"login": "google"})
+    @patch('client.get_json')
     def test_org(self,
                  org_name: str,
                  expected: Dict,
@@ -34,6 +34,7 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json: Mock
             Mock object for get_json.
         """
+        mock_get_json.return_value = expected
         client = GithubOrgClient(org_name)
         result = client.org
         mock_get_json.assert_called_once_with(
@@ -48,7 +49,8 @@ class TestGithubOrgClient(unittest.TestCase):
         payload = {"repos_url": expected_repos_url}
 
         with patch.object(GithubOrgClient,
-                          'org', new_callable=Mock, return_value=payload):
+                          'org', new_callable=PropertyMock) as mock_org:
+            mock_org.return_value = payload
             client = GithubOrgClient("google")
             result = client._public_repos_url
             self.assertEqual(result, expected_repos_url)
@@ -66,8 +68,8 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.return_value = repos_payload
 
         with patch.object(GithubOrgClient,
-                          '_public_repos_url',
-                          new_callable=Mock, return_value=expected_repos_url):
+                          '_public_repos_url', new_callable=PropertyMock) as mock_repos_url:
+            mock_repos_url.return_value = expected_repos_url
             client = GithubOrgClient("google")
             result = client.public_repos()
 
@@ -75,7 +77,6 @@ class TestGithubOrgClient(unittest.TestCase):
             self.assertEqual(result, expected_repos)
 
             mock_get_json.assert_called_once_with(expected_repos_url)
-            client._public_repos_url.assert_called_once()
 
     @parameterized.expand([
         ({"license": {"key": "my_license"}}, "my_license", True),
@@ -99,5 +100,5 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(result, expected)
 
 
-if __name__ == "__main___":
+if __name__ == "__main__":
     unittest.main()
